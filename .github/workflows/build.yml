@@ -12,7 +12,7 @@ jobs:
       
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.0'
+          flutter-version: '3.24.0'  # меняем на твою версию
           
       - run: flutter pub get
       - run: flutter build apk --release
