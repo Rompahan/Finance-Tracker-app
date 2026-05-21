@@ -18,7 +18,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final router = AppRouter().router;
-
+    
     return MaterialApp.router(
       title: 'Finance Tracker',
       theme: AppTheme.lightTheme,

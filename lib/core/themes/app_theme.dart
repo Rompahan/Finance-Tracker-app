@@ -14,7 +14,7 @@ class AppTheme {
       elevation: 0,
     ),
   );
-
+  
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     primarySwatch: Colors.green,

@@ -6,7 +6,7 @@ import '../../presentation/screens/settings_screen.dart';
 
 class AppRouter {
   late final GoRouter router;
-
+  
   AppRouter() {
     router = GoRouter(
       initialLocation: '/',

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../providers/expense_provider.dart';
+import '../../domain/entities/expense.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -66,6 +67,7 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
           ),
+          
           Expanded(
             child: expensesAsync.when(
               data: (expenses) {
@@ -91,7 +93,7 @@ class HomeScreen extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     final expense = expenses[index];
                     return Dismissible(
-                      key: Key(expense.firestoreId ?? expense.id.toString()),
+                      key: Key(expense.id ?? index.toString()),
                       background: Container(
                         color: Colors.red,
                         alignment: Alignment.centerRight,
@@ -103,8 +105,7 @@ class HomeScreen extends ConsumerWidget {
                           context: context,
                           builder: (context) => AlertDialog(
                             title: const Text('Delete Expense'),
-                            content: const Text(
-                                'Are you sure you want to delete this expense?'),
+                            content: const Text('Are you sure you want to delete this expense?'),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context, false),
@@ -112,20 +113,16 @@ class HomeScreen extends ConsumerWidget {
                               ),
                               TextButton(
                                 onPressed: () => Navigator.pop(context, true),
-                                style: TextButton.styleFrom(
-                                    foregroundColor: Colors.red),
+                                style: TextButton.styleFrom(foregroundColor: Colors.red),
                                 child: const Text('Delete'),
                               ),
                             ],
                           ),
                         );
-
-                        if (shouldDelete == true) {
+                        
+                        if (shouldDelete == true && expense.id != null) {
                           final repo = ref.read(expenseRepositoryProvider);
-                          await repo.deleteExpense(
-                            expense.id ?? 0,
-                            firestoreId: expense.firestoreId,
-                          );
+                          await repo.deleteExpense(expense.id!);
                           ref.invalidate(expensesStreamProvider);
                           ref.invalidate(totalExpensesProvider);
                           if (context.mounted) {
@@ -170,18 +167,12 @@ class HomeScreen extends ConsumerWidget {
 
   String _getCategoryIcon(String category) {
     switch (category.toLowerCase()) {
-      case 'food':
-        return '🍔';
-      case 'transport':
-        return '🚗';
-      case 'shopping':
-        return '🛍️';
-      case 'entertainment':
-        return '🎬';
-      case 'bills':
-        return '💡';
-      default:
-        return '💰';
+      case 'food': return '🍔';
+      case 'transport': return '🚗';
+      case 'shopping': return '🛍️';
+      case 'entertainment': return '🎬';
+      case 'bills': return '💡';
+      default: return '💰';
     }
   }
 }
