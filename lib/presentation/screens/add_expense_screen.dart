@@ -17,14 +17,9 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
   final _descriptionController = TextEditingController();
   String _selectedCategory = 'Food';
   DateTime _selectedDate = DateTime.now();
-
+  
   final List<String> _categories = [
-    'Food',
-    'Transport',
-    'Shopping',
-    'Entertainment',
-    'Bills',
-    'Other'
+    'Food', 'Transport', 'Shopping', 'Entertainment', 'Bills', 'Other'
   ];
 
   @override
@@ -73,7 +68,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                initialValue: _selectedCategory,
+                value: _selectedCategory,
                 decoration: const InputDecoration(
                   labelText: 'Category',
                   border: OutlineInputBorder(),
@@ -134,13 +129,13 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
         description: _descriptionController.text,
         date: _selectedDate,
       );
-
+      
       final addExpense = ref.read(addExpenseUseCaseProvider);
       await addExpense(expense);
-
+      
       ref.invalidate(expensesStreamProvider);
       ref.invalidate(totalExpensesProvider);
-
+      
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Expense added successfully')),
@@ -149,7 +144,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
       }
     }
   }
-
+  
   @override
   void dispose() {
     _amountController.dispose();

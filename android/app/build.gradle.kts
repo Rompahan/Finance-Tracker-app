@@ -10,9 +10,8 @@ plugins {
 
 android {
     namespace = "com.example.finance_tracker"
-    compileSdk = 34  // flutter.compileSdkVersion
-
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 35  // было 34 → 35
+    ndkVersion = "27.0.12077973"  // добавил NDK версию
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
