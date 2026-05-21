@@ -6,7 +6,7 @@ import 'dart:io';
 
 part 'app_database.g.dart';
 
-class Expenses extends Table {
+class ExpenseTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   RealColumn get amount => real()();
   TextColumn get category => text()();
@@ -15,36 +15,47 @@ class Expenses extends Table {
   TextColumn get firestoreId => text().nullable()();
 }
 
-@DriftDatabase(tables: [Expenses])
+@DriftDatabase(tables: [ExpenseTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
   int get schemaVersion => 1;
 
-  Future<List<Expense>> getAllExpenses() async {
-    return await select(expenses).get();
+  Future<List<ExpenseTableData>> getAllExpenses() async {
+    return await select(expenseTable).get();
   }
 
-  Future<int> insertExpense(ExpensesCompanion expense) async {
-    return await into(expenses).insert(expense);
+  Future<int> insertExpense(
+    double amount,
+    String category,
+    String description,
+    DateTime date, {
+    String? firestoreId,
+  }) async {
+    return await into(expenseTable).insert(
+      ExpenseTableCompanion(
+        amount: Value(amount),
+        category: Value(category),
+        description: Value(description),
+        date: Value(date),
+        firestoreId:
+            firestoreId != null ? Value(firestoreId) : const Value.absent(),
+      ),
+    );
   }
 
   Future<void> deleteExpense(int id) async {
-    await (delete(expenses)..where((t) => t.id.equals(id))).go();
+    await (delete(expenseTable)..where((t) => t.id.equals(id))).go();
   }
 
   Future<double> getTotalExpenses() async {
-    final result = await (select(expenses)..columns([expenses.amount]))
-        .map((row) => row.read(expenses.amount))
-        .get();
-
-    return result.fold(0.0, (sum, amount) => sum + amount);
-  }
-
-  Future<void> updateFirestoreId(int id, String firestoreId) async {
-    await (update(expenses)..where((t) => t.id.equals(id)))
-        .write(ExpensesCompanion(firestoreId: Value(firestoreId)));
+    final all = await select(expenseTable).get();
+    double total = 0;
+    for (var item in all) {
+      total += item.amount;
+    }
+    return total;
   }
 }
 

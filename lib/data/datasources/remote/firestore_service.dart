@@ -16,6 +16,7 @@ class FirestoreService {
     return doc.id;
   }
 
+  // Явно указываем тип Stream<List<Expense>>
   Stream<List<Expense>> getExpenses() {
     return _firestore
         .collection(_collection)

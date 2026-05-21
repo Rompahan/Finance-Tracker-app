@@ -33,7 +33,9 @@ class SettingsScreen extends ConsumerWidget {
                   value: ThemeMode.light,
                   groupValue: themeMode,
                   onChanged: (value) {
-                    ref.read(themeModeProvider.notifier).toggleTheme(value!);
+                    if (value != null) {
+                      ref.read(themeModeProvider.notifier).toggleTheme(value);
+                    }
                   },
                 ),
                 RadioListTile<ThemeMode>(
@@ -41,7 +43,9 @@ class SettingsScreen extends ConsumerWidget {
                   value: ThemeMode.dark,
                   groupValue: themeMode,
                   onChanged: (value) {
-                    ref.read(themeModeProvider.notifier).toggleTheme(value!);
+                    if (value != null) {
+                      ref.read(themeModeProvider.notifier).toggleTheme(value);
+                    }
                   },
                 ),
                 RadioListTile<ThemeMode>(
@@ -49,7 +53,9 @@ class SettingsScreen extends ConsumerWidget {
                   value: ThemeMode.system,
                   groupValue: themeMode,
                   onChanged: (value) {
-                    ref.read(themeModeProvider.notifier).toggleTheme(value!);
+                    if (value != null) {
+                      ref.read(themeModeProvider.notifier).toggleTheme(value);
+                    }
                   },
                 ),
               ],
