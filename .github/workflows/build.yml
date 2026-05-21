@@ -16,12 +16,20 @@ jobs:
           
       - run: flutter clean
       - run: flutter pub get
-      - run: flutter build apk --release
+      - run: flutter build apk --release --no-tree-shake-icons
       
-      - name: List output files
-        run: ls -la build/app/outputs/flutter-apk/
+      - name: Find APK file
+        run: |
+          find . -name "*.apk" -type f
+          ls -la build/
+          ls -la build/app/
+          ls -la build/app/outputs/
+          ls -la build/app/outputs/apk/
+          ls -la build/app/outputs/flutter-apk/ || true
       
       - uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: build/app/outputs/flutter-apk/*.apk
+          path: |
+            **/*.apk
+            !**/debug.apk
