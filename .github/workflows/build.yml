@@ -12,10 +12,15 @@ jobs:
       
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'  # меняем на твою версию
+          flutter-version: '3.24.0'
           
-      - run: flutter pub get
-      - run: flutter build apk --release
+      - name: Clean and get dependencies
+        run: |
+          flutter clean
+          flutter pub get
+          
+      - name: Build APK
+        run: flutter build apk --release
       
       - uses: actions/upload-artifact@v4
         with:
